@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CartItem, CartItemProps } from "@/components/cart/CartItem";
+import { CartItem, CartItemData } from "@/components/cart/CartItem";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 
 // Dummy Cart Data
-const initialCartItems: Omit<CartItemProps, "onRemove">[] = [
+const initialCartItems: CartItemData[] = [
     { id: 1, name: "Fortune Sunflower Oil", image: "bg-yellow-50", price: 79.20, oldPrice: 206.50, quantity: 1, rating: 5 },
     { id: 2, name: "Fresh Organic Apple", image: "bg-red-50", price: 45.00, oldPrice: 50.00, quantity: 2, rating: 4 },
     { id: 3, name: "Whole Wheat Bread", image: "bg-amber-50", price: 23.90, oldPrice: 25.00, quantity: 1, rating: 5 },
@@ -61,7 +61,6 @@ export default function CartPage() {
 
                             <div className="divide-y">
                                 {items.map((item) => (
-                                    // @ts-expect-error - CartItem props mismatch will be fixed
                                     <CartItem key={item.id} item={item} onRemove={handleRemove} />
                                 ))}
                             </div>
@@ -98,9 +97,11 @@ export default function CartPage() {
                                 </div>
                             </div>
 
-                            <Button className="w-full h-12 text-base font-semibold shadow-lg shadow-primary/25">
-                                Proceed to Checkout
-                            </Button>
+                            <Link href="/checkout">
+                                <Button className="w-full h-12 text-base font-semibold shadow-lg shadow-primary/25">
+                                    Proceed to Checkout
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 

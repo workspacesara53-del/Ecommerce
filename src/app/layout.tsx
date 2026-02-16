@@ -16,8 +16,39 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "E-Shop - Best Quality Products",
-  description: "Get the best quality products at the lowest prices.",
+  title: {
+    default: "BoroBazar - Modern E-Commerce Platform",
+    template: "%s | BoroBazar"
+  },
+  description: "Shop the latest products with BoroBazar. High-quality groceries, electronics, and daily essentials delivered to your doorstep.",
+  keywords: ["e-commerce", "online shopping", "groceries", "electronics", "BoroBazar", "Egypt shopping"],
+  authors: [{ name: "BoroBazar Team" }],
+  creator: "BoroBazar",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://borobazar-eta.vercel.app/",
+    siteName: "BoroBazar",
+    title: "BoroBazar - Modern E-Commerce Platform",
+    description: "Shop the latest products with BoroBazar. Fast delivery and best prices.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "BoroBazar Banner",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BoroBazar - Modern E-Commerce Platform",
+    description: "Shop the latest products with BoroBazar. Fast delivery and best prices.",
+    images: ["/og-image.jpg"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

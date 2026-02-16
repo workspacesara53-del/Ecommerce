@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { X, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export interface CartItemProps {
+export interface CartItemData {
     id: number;
     name: string;
     image: string;
@@ -12,10 +11,14 @@ export interface CartItemProps {
     oldPrice: number;
     quantity: number;
     rating: number;
+}
+
+interface CartItemProps {
+    item: CartItemData;
     onRemove: (id: number) => void;
 }
 
-export const CartItem = ({ item, onRemove }: { item: CartItemProps, onRemove: (id: number) => void }) => {
+export const CartItem = ({ item, onRemove }: CartItemProps) => {
     const discount = Math.round(((item.oldPrice - item.price) / item.oldPrice) * 100);
 
     return (

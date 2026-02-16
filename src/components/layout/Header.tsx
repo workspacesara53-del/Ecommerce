@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, ShoppingCart, User, Heart, Menu, X } from "lucide-react";
+import { ShoppingCart, User, Heart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { SearchBar } from "@/components/layout/SearchBar";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const Header = () => {
@@ -17,8 +17,8 @@ export const Header = () => {
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <p>Get the best quality products at the lowest prices!</p>
                     <div className="flex gap-4">
-                        <Link href="#" className="hover:underline">Help</Link>
-                        <Link href="#" className="hover:underline">Track Order</Link>
+                        <Link href="/contact" className="hover:underline">Help</Link>
+                        <Link href="/track-order" className="hover:underline">Track Order</Link>
                     </div>
                 </div>
             </div>
@@ -27,33 +27,38 @@ export const Header = () => {
             <div className="container mx-auto px-4 py-4 md:py-6">
                 <div className="flex items-center justify-between gap-4">
                     {/* Logo */}
-                    <Link href="/" className="text-2xl font-bold text-primary flex-shrink-0">
-                        E-Shop
+                    <Link href="/" className="text-2xl font-black text-primary flex-shrink-0 tracking-tighter">
+                        BoroBazar
                     </Link>
 
                     {/* Search Bar - Desktop */}
-                    <div className="hidden md:flex flex-1 max-w-xl mx-8 relative">
-                        <Input
-                            placeholder="Search for products..."
-                            className="w-full pl-4 pr-10 rounded-full border-2 border-primary/20 focus-visible:border-primary transition-colors"
-                        />
-                        <Button size="icon" className="absolute right-1 top-1 bottom-1 rounded-full h-auto w-8 shadow-none bg-primary/90 hover:bg-primary text-white">
-                            <Search className="h-4 w-4" />
-                        </Button>
-                    </div>
+                    <SearchBar className="hidden md:flex flex-1 max-w-xl mx-8 relative" />
 
                     {/* Icons */}
-                    <div className="flex items-center gap-2 md:gap-4">
-                        <Button variant="ghost" size="icon" className="hidden md:flex">
-                            <User className="h-5 w-5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="hidden md:flex">
-                            <Heart className="h-5 w-5" />
-                        </Button>
+                    <div className="flex items-center gap-2 md:gap-5">
+                        <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-muted-foreground mr-2">
+                            <Link href="/login" className="hover:text-primary transition-colors uppercase">Login</Link>
+                            <span className="opacity-30">|</span>
+                            <Link href="/register" className="hover:text-primary transition-colors uppercase">Register</Link>
+                        </div>
+
+                        <Link href="/account/profile">
+                            <Button variant="ghost" size="icon" className="hidden md:flex">
+                                <User className="h-5 w-5" />
+                            </Button>
+                        </Link>
+                        <Link href="/wishlist">
+                            <Button variant="ghost" size="icon" className="hidden md:flex relative">
+                                <Heart className="h-5 w-5" />
+                                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                                    0
+                                </span>
+                            </Button>
+                        </Link>
                         <Link href="/cart">
                             <Button variant="ghost" size="icon" className="relative">
                                 <ShoppingCart className="h-5 w-5" />
-                                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                                <span className="absolute -top-1 -right-1 bg-destructive text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold border-2 border-white">
                                     2
                                 </span>
                             </Button>
@@ -73,7 +78,7 @@ export const Header = () => {
 
                 {/* Search Bar - Mobile */}
                 <div className="md:hidden mt-4">
-                    <Input placeholder="Search..." className="w-full rounded-full" />
+                    <SearchBar className="relative" />
                 </div>
             </div>
 
@@ -83,9 +88,9 @@ export const Header = () => {
                     <nav className="flex items-center gap-8 py-3 text-sm font-medium">
                         <Link href="/" className="text-primary">Home</Link>
                         <Link href="/products" className="hover:text-primary transition-colors">Products</Link>
+                        <Link href="/about" className="hover:text-primary transition-colors">About</Link>
+                        <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
                         <Link href="/deals" className="hover:text-primary transition-colors">Deals</Link>
-                        <Link href="/new" className="hover:text-primary transition-colors">New Arrivals</Link>
-                        <Link href="/brands" className="hover:text-primary transition-colors">Brands</Link>
                     </nav>
                 </div>
             </div>
@@ -102,8 +107,10 @@ export const Header = () => {
                         <nav className="flex flex-col p-4 space-y-4 font-medium">
                             <Link href="/" className="text-primary">Home</Link>
                             <Link href="/products">Products</Link>
+                            <Link href="/about">About</Link>
+                            <Link href="/contact">Contact</Link>
                             <Link href="/cart">Cart</Link>
-                            <Link href="/account">My Account</Link>
+                            <Link href="/account/profile">My Account</Link>
                             <Link href="/wishlist">Wishlist</Link>
                         </nav>
                     </motion.div>

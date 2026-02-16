@@ -1,99 +1,131 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+interface Slide {
+    id: string;
+    title: string;
+    subtitle: string;
+    image_url: string;
+    link_url: string;
+    button_text: string;
+}
 
 export const Hero = () => {
+    const [slides, setSlides] = useState<Slide[]>([]);
+    const [current, setCurrent] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchSlides() {
+            const { data, error } = await supabase
+                .from("slides")
+                .select("*")
+                .eq("is_active", true)
+                .order("order_index", { ascending: true });
+
+            if (data) setSlides(data);
+            setLoading(false);
+        }
+        fetchSlides();
+    }, []);
+
+    const next = () => setCurrent((prev) => (prev + 1) % slides.length);
+    const prev = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+
+    if (loading) return <div className="h-[500px] w-full bg-secondary/20 animate-pulse rounded-3xl container mx-auto my-8"></div>;
+    if (slides.length === 0) return null;
+
     return (
-        <section className="relative overflow-hidden bg-secondary/30">
-            <div className="container mx-auto px-4 py-12 md:py-24 flex flex-col-reverse md:flex-row items-center gap-8">
-                {/* Text Content */}
-                <div className="flex-1 space-y-6 text-center md:text-left z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">
-                            100% Organic Products
-                        </span>
-                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground">
-                            Get the best quality <br className="hidden md:block" />
-                            products at the <br className="hidden md:block" />
-                            lowest prices
-                        </h1>
-                    </motion.div>
+        <section className="relative overflow-hidden group">
+            <div className="container mx-auto px-4 py-8">
+                <div className="relative h-[400px] md:h-[500px] w-full rounded-[2rem] overflow-hidden shadow-2xl">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={slides[current].id}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.7 }}
+                            className="absolute inset-0"
+                        >
+                            {/* Background Image with Overlay */}
+                            <div
+                                className="absolute inset-0 bg-cover bg-center transition-transform duration-10000 scale-110 group-hover:scale-100"
+                                style={{ backgroundImage: `url(${slides[current].image_url})` }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-lg text-muted-foreground max-w-lg mx-auto md:mx-0"
-                    >
-                        We have prepared special discounts for you on organic breakfast products.
-                    </motion.p>
+                            {/* Content */}
+                            <div className="relative h-full container mx-auto px-8 md:px-16 flex flex-col justify-center items-start text-white">
+                                <motion.span
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="bg-primary px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-4 shadow-lg"
+                                >
+                                    {slides[current].subtitle}
+                                </motion.span>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
-                    >
-                        <Button size="lg" className="bg-primary hover:bg-primary/90">
-                            Shop Now
-                        </Button>
-                        <div className="flex items-center gap-2 text-lg font-bold">
-                            <span className="text-3xl text-destructive">$21.97</span>
-                            <span className="text-muted-foreground line-through decoration-destructive/50 decoration-2 text-base">$30.00</span>
-                        </div>
-                    </motion.div>
-                </div>
+                                <motion.h1
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.5, duration: 0.6 }}
+                                    className="text-4xl md:text-7xl font-black mb-6 max-w-2xl leading-[1.1] tracking-tighter"
+                                >
+                                    {slides[current].title}
+                                </motion.h1>
 
-                {/* Image/Visual */}
-                <div className="flex-1 relative w-full max-w-lg aspect-square">
-                    {/* Decorative Elements */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-green-200/50 to-transparent rounded-full blur-3xl -z-10" />
-
-                    {/* Placeholder for Product Image */}
-                    <div className="w-full h-full relative flex items-center justify-center">
-                        <div className="relative w-full h-full">
-                            {/* 
-                 In real app, use next/image here. 
-                 Since I don't have the assets, I'm creating a CSS visual representation or SVG 
-               */}
-                            <div className="w-full h-full bg-orange-100/50 rounded-3xl border-2 border-white/50 shadow-xl flex items-center justify-center p-8">
-                                <PackageIcon className="w-32 h-32 text-orange-400 opacity-80" />
-                                <div className="absolute top-4 right-4 bg-yellow-400 text-yellow-900 font-bold rounded-full w-20 h-20 flex items-center justify-center -rotate-12 shadow-lg z-20">
-                                    <span className="text-center text-xs leading-tight">SUPER<br />OMEGA<br />SQUARES</span>
-                                </div>
-                                <div className="absolute bottom-8 left-8 bg-white/80 backdrop-blur p-4 rounded-xl shadow-sm max-w-[150px]">
-                                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mb-2">
-                                        <LeafIcon className="w-4 w-4 text-green-600" />
-                                    </div>
-                                    <p className="text-xs font-semibold text-green-800">100% Organic</p>
-                                </div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.7 }}
+                                >
+                                    <Link href={slides[current].link_url || "/products"}>
+                                        <Button size="lg" className="bg-white text-primary hover:bg-white/90 rounded-full px-10 h-14 font-black uppercase tracking-widest text-xs shadow-xl transition-all hover:scale-105 active:scale-95">
+                                            {slides[current].button_text || "Shop Now"}
+                                        </Button>
+                                    </Link>
+                                </motion.div>
                             </div>
-                        </div>
+                        </motion.div>
+                    </AnimatePresence>
+
+                    {/* Navigation Buttons */}
+                    {slides.length > 1 && (
+                        <>
+                            <button
+                                onClick={prev}
+                                className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-primary transition-all opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0"
+                            >
+                                <ChevronLeft className="h-6 w-6" />
+                            </button>
+                            <button
+                                onClick={next}
+                                className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-primary transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
+                            >
+                                <ChevronRight className="h-6 w-6" />
+                            </button>
+                        </>
+                    )}
+
+                    {/* Indicators */}
+                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+                        {slides.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setCurrent(i)}
+                                className={`h-1.5 transition-all rounded-full ${i === current ? "bg-primary w-8" : "bg-white/40 w-4 hover:bg-white/60"}`}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
         </section>
     );
 };
-
-// Simple visual components for the placeholder
-function PackageIcon({ className }: { className?: string }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <path d="M16.5 9.4 7.5 4.21" /><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" x2="12" y1="22.08" y2="12" />
-        </svg>
-    )
-}
-
-function LeafIcon({ className }: { className?: string }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.77 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-        </svg>
-    )
-}

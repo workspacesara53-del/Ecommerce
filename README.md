@@ -9,6 +9,10 @@ A modern, fully responsive e-commerce platform built with Next.js 16, TypeScript
 - ✅ **Products Listing** (`/products`) - Grid view with filters, sorting, and pagination
 - ✅ **Product Details** (`/products/[id]`) - Image gallery, reviews, related products
 - ✅ **Shopping Cart** (`/cart`) - Cart management with totals summary
+- ✅ **Checkout** (`/checkout`) - Complete checkout flow with shipping and payment
+- ✅ **Wishlist** (`/wishlist`) - Save favorite products
+- ✅ **About Us** (`/about`) - Company information, values, and features
+- ✅ **Contact** (`/contact`) - Contact form, info cards, and FAQ
 
 ### Key Features
 - 🎨 Modern, premium UI design with smooth animations (Framer Motion)
@@ -93,14 +97,16 @@ npm run lint     # Run ESLint
 
 ## 🔄 Future Enhancements
 
-- [ ] Checkout page
-- [ ] User authentication
-- [ ] Wishlist functionality
-- [ ] Product search with autocomplete
-- [ ] Order tracking
-- [ ] Admin dashboard
-- [ ] Payment integration
-- [ ] Real backend API integration
+- [ ] User authentication & account management
+- [ ] Real-time product search with autocomplete
+- [ ] Order tracking system
+- [ ] Admin dashboard for inventory management
+- [ ] Payment gateway integration (Stripe, PayPal)
+- [ ] Product reviews and ratings system (backend)
+- [ ] Email notifications
+- [ ] Multi-language support
+- [ ] Dark mode toggle
+- [ ] Backend API integration with database
 
 ## 📄 License
 

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase";
 
 const sidebarLinks = [
     { title: "Dashboard", icon: LayoutDashboard, href: "/admin", color: "text-blue-500" },
@@ -103,16 +104,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                         </div>
                                         {isSubmenuOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                                     </button>
+                                ) : link.isLogout ? (
+                                    <button
+                                        onClick={async () => {
+                                            await supabase.auth.signOut();
+                                            window.location.href = "/login";
+                                        }}
+                                        className={cn(
+                                            "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group mt-10 hover:bg-destructive/10 hover:text-destructive text-muted-foreground"
+                                        )}
+                                    >
+                                        <Icon className="h-5 w-5 group-hover:text-destructive" />
+                                        <span className="font-semibold">{link.title}</span>
+                                    </button>
                                 ) : (
                                     <Link
                                         href={link.href}
                                         className={cn(
                                             "flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group hover:bg-secondary/20",
-                                            isActive && !link.isLogout ? "bg-primary/5 text-primary" : "text-muted-foreground",
-                                            link.isLogout && "mt-10 hover:bg-destructive/10 hover:text-destructive"
+                                            isActive ? "bg-primary/5 text-primary" : "text-muted-foreground"
                                         )}
                                     >
-                                        <Icon className={cn("h-5 w-5", isActive && !link.isLogout ? "text-primary" : "group-hover:text-primary", link.isLogout && "group-hover:text-destructive")} />
+                                        <Icon className={cn("h-5 w-5", isActive ? "text-primary" : "group-hover:text-primary")} />
                                         <span className="font-semibold">{link.title}</span>
                                     </Link>
                                 )}
